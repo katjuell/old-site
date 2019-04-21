@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Merriweather:400,700" rel="stylesheet">
     <!-- Custom styles for this template -->
-    <link href="../css/clean-blog.min.css" rel="stylesheet" type="text/css">
+    <link href="https://katjuell-site.nyc3.cdn.digitaloceanspaces.com/css/clean-blog.min.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
@@ -58,9 +58,9 @@
                 <div class="col-xl-8 col-lg-10 mx-auto">
                     <p>This post is intended to collect some thoughts about Docker <a href="https://docs.docker.com/storage/volumes/">volumes</a>. It&#39;s going to cover topics that I&#39;ve encountered while writing and editing, including: challenges when working with <a href="https://docs.docker.com/storage/bind-mounts/">bind mounts</a> in development, issues to think about with permissions, and cool things you can do with named volumes as you get your setup ready for deployment. This post is not meant to be comprehensive; instead, it&#39;s meant to be a focused set of tips for getting the most out of your volumes.</p>
                     <h2 id="bind-mounts">Bind Mounts</h2>
-                    <p>Probably the most common ambiguity I&#39;ve encountered while working with Docker volumes is the idea that bind mounts are synonymous with volumes. Maybe this is a holdover from my previous career, but, to quote Inigo Montoya:</p>
+		    <p>Probably the most common ambiguity I&#39;ve encountered while working with Docker volumes is in the use of the term itself. According to the <a href="https://docs.docker.com/storage/">Docker docs</a>, you have two choices when it comes to mounting your data: volumes and bind mounts. So when we use the term volume, we are referring to this <strong>type</strong> of mount. Maybe this is a holdover from my previous career, but when I see the term &#39;volume&#39; in some contexts, I have a bit of an Inigo Montoya moment:</p>
                     <p><img src="https://katjuell-site.nyc3.cdn.digitaloceanspaces.com/inigo.png" alt="Inigo Montoya quote"></p>
-                    <p>For example, it&#39;s a common practice to have something like this as part of your <code>app</code> service in a <a href="https://docs.docker.com/compose/compose-file/"><code>docker-compose.yml</code></a> file:</p>
+                    <p>This is especially important when thinking about people who may be new to Docker. For example, it&#39;s a common practice to have something like this as part of an <code>app</code> dev service setup in a <a href="https://docs.docker.com/compose/compose-file/"><code>docker-compose.yml</code></a> file:</p>
                     <pre><code>
                   </span><span class="hljs-comment">#App Service</span>
                     app:
@@ -109,13 +109,11 @@
 
                   COPY package*.json ./
 
+		  USER node
+
                   RUN npm install
 
-                  COPY . .
-
                   COPY --<span class="hljs-attr">chown=</span><span class="hljs-keyword">node</span><span class="hljs-title">:node</span> . .
-
-                  <span class="hljs-keyword">USER</span> <span class="hljs-title">node</span>
 
                   EXPOSE <span class="hljs-number">8080</span>
 
@@ -156,6 +154,33 @@
                     <p>Your volume, <code>app-code</code>, would be populated at runtime with the contents of the project directory (here <code>your_project</code>), which would then copy over to the containers. This prevents some of the ambiguity of using bind mounts, though you would still need to think about permissions, since these volumes would be mounted as <strong>root</strong>.</p>
                     <h2 id="conclusion">Conclusion</h2>
                     <p>This post is an attempt to summarize some of the most relevant things I&#39;ve run into when working with Docker volumes and running containers as a non-root user. Docker volumes are an extensive topic, and I hope to have an opportunity to return to them in the future. </p>
+                </div>
+            </div>
+        </div>
+    </article>
+        <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-8 col-lg-10 mx-auto">
+                    <ul class="list-inline text-center">
+                        <li class="list-inline-item">
+                            <a href="https://twitter.com/katjuell">
+                                <span class="fa-stack fa-lg">
+                        <i class="fas fa-circle fa-stack-2x"></i>
+                        <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+                        </span>
+                            </a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="https://github.com/katjuell">
+                                <span class="fa-stack fa-lg">
+                        <i class="fas fa-circle fa-stack-2x"></i>
+                        <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                        </span>
+                            </a>
+                        </li>
+                    </ul>
                     <p class="copyright text-muted">Copyright &#xA9; katjuell.site 2018</p>
                 </div>
             </div>
