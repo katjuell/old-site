@@ -4,8 +4,19 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta property="og:title" content="Some Thoughts on Docker Volumes">
+    <meta property="og:description" content="Quick tips for working with Docker volumes">
+    <meta property="og:image" content="https://katjuell-site.nyc3.cdn.digitaloceanspaces.com/containers.jpg">
+    <meta property="og:url" content="https://katjuell.site/posts/articles/academic_plan.html">
+    
+    <meta name="twitter:site" content="On Languages">
+    <meta name="twitter:title" content="Some Thoughts on Docker Volumes | Kat Juell">
+    <meta name="twitter:description" content="Quick tips for working with Docker volumes">
+    <meta name="twitter:creator" content="Kat Juell">
+    <meta name="twitter:card" content="photo" />
+    <meta name="twitter:url" content="https://katjuell.site/posts/articles/academic_plan.html"/>
+    <meta name="twitter:image" content="https://katjuell-site.nyc3.cdn.digitaloceanspaces.com/containers.jpg">
+
     <title>On Languages</title>
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
@@ -56,7 +67,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-xl-8 col-lg-10 mx-auto">
-                    <p>This post is intended to collect some thoughts about Docker <a href="https://docs.docker.com/storage/volumes/">volumes</a>. It&#39;s going to cover topics that I&#39;ve encountered while writing and editing, including: challenges when working with <a href="https://docs.docker.com/storage/bind-mounts/">bind mounts</a> in development, issues to think about with permissions, and cool things you can do with named volumes as you get your setup ready for deployment. This post is not meant to be comprehensive; instead, it&#39;s meant to be a focused set of tips for getting the most out of your volumes.</p>
+                    <p>This post is intended to collect some thoughts about Docker <a href="https://docs.docker.com/storage/volumes/">volumes</a>. It&#39;s going to cover topics that I&#39;ve encountered while writing and editing, including challenges when working with <a href="https://docs.docker.com/storage/bind-mounts/">bind mounts</a> in development, issues to think about with permissions, and cool things you can do with named volumes as you get your setup ready for deployment. This post is not meant to be comprehensive; instead, it&#39;s meant to be a focused set of tips for getting the most out of your volumes.</p>
                     <h2 id="bind-mounts">Bind Mounts</h2>
 		    <p>Probably the most common ambiguity I&#39;ve encountered while working with Docker volumes is in the use of the term itself. According to the <a href="https://docs.docker.com/storage/">Docker docs</a>, you have two choices when it comes to mounting your data: volumes and bind mounts. So when we use the term volume, we are referring to this <strong>type</strong> of mount. Maybe this is a holdover from my previous career, but when I see the term &#39;volume&#39; in some contexts, I have a bit of an Inigo Montoya moment:</p>
                     <p><img src="https://katjuell-site.nyc3.cdn.digitaloceanspaces.com/inigo.png" alt="Inigo Montoya quote"></p>
@@ -69,7 +80,8 @@
                         - ./:/app
                     ...
                   </code></pre>
-                    <p>This, my friends, is a bind mount, which mounts the contents of a specified directory on the host to a specified location on the Docker container. For development setups, bind mounts can prove handy, since they allow you to make synchronous changes to your code on the container and host. If your project is in active development this can be quite useful. </p>
+		  <p>Sometimes, I see this introduced as a &#39;volume&#39;. Docker Compose allows a &#39;volumes&#39; configuration option when defining services, so the reference could be to that, but even then it's still necessary to specify the type of mount that the config option references. This particular mount is a bind mount, which mounts the contents of a specified directory on the host to a specified location on the Docker container.</p>
+		  <p>For development setups, bind mounts can prove handy, since they allow you to make synchronous changes to your code on the container and host. If your project is in active development this can be quite useful. </p>
                     <p>However....</p>
                     <p>There are also pitfalls. For example, let&#39;s say you have a <a href="https://docs.docker.com/engine/reference/builder/">Dockerfile</a> for a <a href="https://nodejs.org">Node.js</a> application that looks like this:</p>
                     <pre><code>
