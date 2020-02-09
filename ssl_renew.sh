@@ -1,4 +1,8 @@
 #!/bin/bash
 
-/usr/local/bin/docker-compose -f /home/mrcat/blog/docker-compose.yml run certbot renew \
-&& /usr/local/bin/docker-compose -f /home/mrcat/blog/docker-compose.yml kill -s SIGHUP webserver
+COMPOSE="/usr/local/bin/docker-compose --no-ansi"
+DOCKER="/usr/bin/docker"
+
+cd /home/mrcat/blog/
+$COMPOSE run certbot renew && $COMPOSE kill -s SIGHUP webserver
+$DOCKER system prune -af
